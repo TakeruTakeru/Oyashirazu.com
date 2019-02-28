@@ -1,0 +1,82 @@
+@charset "UTF-8";
+@import "../define";
+
+#footer-component {
+    .footer-wrapper {
+        margin-top: 30px;
+        height: 150px;
+        width: 100%;
+        background-color: $site-color;
+        ul {
+            text-align: center;
+            background-color: black;
+            li {
+                display: inline-block;
+                list-style: none;
+                font-size: 1.5rem;
+                
+                .footer-btn {
+                    color: darkgray;
+                    border: 0px;
+                    background-color: black;
+                    text-decoration: underline;
+                    margin-top: 60px;
+                    margin-right: 30px;
+                    letter-spacing: 1px;
+                    &:hover {
+                        color: lightgray;
+                        transition: all 0.5s;
+                      }
+                      &:focus {
+                        color: lightgray;
+                        outline: none;
+                      }
+                }
+            }
+        }
+        .site-right {
+            margin-top: 20px;
+            text-align: center;
+            color: darkgray;
+            letter-spacing: 3px;
+        }
+    }
+}
+
+@media(max-width: 768px) {
+    #footer-component {
+        .footer-wrapper {
+            margin-top: 15px;
+            height: 200px;
+            width: 100%;
+            background-color: $site-nav-background-color;
+            ul {
+                text-align: center;
+                background-color: $site-nav-background-color;
+                li {
+                    display: block;
+                    list-style: none;
+                    font-size: 2rem;
+                    
+                    .footer-btn {
+                        color: $site-anti-color;
+                        border: 0px;
+                        background-color: $site-nav-background-color;
+                        text-decoration: underline;
+                        margin-top: 20px;
+                        margin-right: 10px;
+                        letter-spacing: 2px;
+                        &:hover {
+                            color: #26547C;
+                            transition: all 0.5s;
+                          }
+                          &:focus {
+                            color: #26547C;
+                            outline: none;
+                          }
+                    }
+                }
+            }
+        }
+    }
+}

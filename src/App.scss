@@ -1,0 +1,74 @@
+
+@import "style/css/header/HeaderComponent";
+@import "style/css/body/HomeComponent";
+@import "style/css/footer/FooterComponent";
+@import "style/css/body/login";
+@import "style/css/body/body";
+@import "style/css/body/library/carousel";
+@import "style/css/define";
+
+html {
+  font-size: 62.5%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  // background: #151515 url('./style/static/snow_mountain1.jpeg') no-repeat fixed left bottom;
+  background-size: cover;
+  height: 100vh;
+
+  color: antiquewhite;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root-component {
+  width: 100%;
+  /* height: 40px; */
+  position: relative;
+  top: 5px;
+  margin: auto;
+}
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 100%;
+  background: #2e2d31;
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+  text-align: center;
+  color: #ffff;
+}
+
+@media (max-width: 768px) {
+
+  html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    font-family: Poppins;
+    font-weight: 400;
+    background: rgba(255,255,255,0.8) !important;
+  }
+
+  .content {
+    margin: 7px 15px 7px 15px;
+  }
+
+}

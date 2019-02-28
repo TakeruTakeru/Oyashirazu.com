@@ -1,0 +1,15 @@
+@charset "UTF-8";
+@import "../../define";
+
+.image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    margin: 5px ;
+}
+
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 400px;
+    overflow: hidden;
+}

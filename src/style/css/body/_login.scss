@@ -1,0 +1,79 @@
+@charset "UTF-8";
+@import "../define";
+
+@media (max-width: 768px) {
+  #login {
+    font-family: $font-family-body;
+    color: $sentence-color;
+    text-align: center;
+    background: #dedede;
+    padding: 10px;
+    .login-wrapper {
+      h2 {
+        color: $site-color;
+        font-size: 3rem;
+        letter-spacing: 2px;
+      }
+    }
+
+    .error-message {
+      #error-message {
+        color: crimson;
+        font-size: 1rem;
+        border-bottom: solid 1px crimson;
+      }
+    }
+
+    .form {
+      margin: 10px 0px 10px 0px;
+      .form-id {
+        margin: 10px;
+        & input {
+          border: none;
+          border-radius: 10px;
+          background-color: white;
+          &:focus {
+            transition-duration: 0.5s;
+            outline: none;
+            background-color: snow;
+          }
+        }
+      }
+
+      .form-password {
+        margin: 10px;
+        & input {
+          border: none;
+          border-radius: 10px;
+          background-color: white;
+          &:focus {
+            transition-duration: 0.5s;
+            outline: none;
+            background-color: snow;
+          }
+        }
+      }
+
+      .form-id, .form-password {
+        & input {
+          font-size: 16px;
+          transform: scale(0.9);
+          &::placeholder {
+            color: rgba(0, 0, 0, 0.3)
+          }
+        }
+      }
+
+      .form-submit {
+        margin: 10px auto 10px auto;
+        width: 100px;
+        background: white;
+        border-radius: 10px;
+        & input {
+          width: 100%;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+}
