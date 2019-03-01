@@ -43,9 +43,6 @@ const WrappingImage = Ex => {
     }
 }
 
-
-
-
 export default class CarouselComponent extends Component {
 
     constructor(props) {
@@ -66,14 +63,12 @@ export default class CarouselComponent extends Component {
     }
 
     sysOut = e => {
-        // console.log(e.target)
         return;
     }
 
   render() {
 
     const {files} = this.state;
-    console.log(process.env.REACT_APP_F)
     const Wrap = WrappingImage(CarouselDemo)
 
     return (
@@ -83,35 +78,4 @@ export default class CarouselComponent extends Component {
       </div>
     );
   }
-}
-
-//this is simple sfc component
-
-//'Root' doesn't need to know children component.
-//this makes it possible to accomplish one way data flow
-const Root = props => {
-    console.log(props)
-    return <h3>{props.children}</h3>
-}
-
-const AllHoge = props => {
-    return <div>
-        <Root>
-            <Hoge_1></Hoge_1>
-            <Hoge_2></Hoge_2>
-            <Hoge_3></Hoge_3>
-        </Root>
-    </div>
-}
-
-const Hoge_1 = props => {
-    return <i>hello sfc</i>
-}
-
-const Hoge_2 = props => {
-    return <i>hogehoge</i>
-}
-
-const Hoge_3 = props => {
-    return <i>this is test.</i>
 }

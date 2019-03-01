@@ -21,7 +21,6 @@ export default class Github extends Component {
               this.setState({
                 userDatas: res.data
               });
-              console.log(res);
             })
     }
 
