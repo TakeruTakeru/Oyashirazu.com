@@ -28,3 +28,12 @@ export class ErrorModel {
         return this._errorMessage;
     }
 }
+
+export class AccountingItemModel {
+    constructor(name) {
+        this.name = name;
+        this.fee = 0;
+        this.isConfirmed = false;
+        this.userRate = 0;
+    }
+}

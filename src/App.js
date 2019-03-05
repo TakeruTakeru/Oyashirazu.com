@@ -5,12 +5,13 @@ import Dev from "./component/page/dev";
 import Info from "./component/page/info";
 import Library from "./component/page/library";
 import Footer from "./component/utils/footer";
+import Accounting from './component/page/accounting';
 //setting content
 import { config } from "./config";
 import Login from "./component/config/login";
 import PrivateRouter from "./component/config/auth";
 import store from './store/Store';
-import { Provider, } from 'mobx-react';
+import { Provider, inject, observer } from 'mobx-react';
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import "./App.scss";
 import "antd/dist/antd.css";
@@ -66,6 +67,11 @@ class App extends Component {
                         dev doc
                       </Link>
                     </li>
+                    <li>
+                      <Link className="nav-link" to="/accounting">
+                        accounting
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </nav>
@@ -80,6 +86,7 @@ class App extends Component {
                 <PrivateRouter path="/library" component={Library} />
                 <PrivateRouter path="/info" component={Info} />
                 <PrivateRouter path="/dev" component={Dev} />
+                <PrivateRouter path="/accounting" component={inject("store")(observer(Accounting))} />
               </Switch>
           </div>
           <div className="footer">

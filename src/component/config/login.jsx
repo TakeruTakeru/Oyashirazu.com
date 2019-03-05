@@ -49,7 +49,8 @@ class SignIn extends Component {
   render() {
 
     const { loading } = this.props.store.userState;
-
+    const {userState} = this.props.store;
+    console.log(userState)
     const message = loading ?  <Spiner /> : undefined;
 
     return (
