@@ -6,14 +6,16 @@ class AccountingState {
 
   addItem(name) {
     //prevent from same name item and false value.
-    !name|| this.items.some(item => {
+    !name ||
+      this.items.some(item => {
         return item.name == name;
-    }) || this.items.push(new AccountingItemModel(name));
+      }) ||
+      this.items.push(new AccountingItemModel(name));
     return this.items;
   }
 
   deleteItems() {
-      this.items = [];
+    this.items = [];
   }
 
   get getItems() {
@@ -23,20 +25,27 @@ class AccountingState {
   onChangeFee(name, fee) {
     //   console.log(name, fee)
     let newItems = this.items.map(item => {
-        item.fee = item.name === name ? fee : item.fee;
-        return item;
+      item.fee = item.name === name ? fee : item.fee;
+      return item;
     });
     this.items = newItems;
   }
 
-doSettlement(name) {
+  onChangeRate(name, value) {
     let newItems = this.items.map(item => {
-        item.isConfirmed = item.name === name;
-        return item;
+      item.name === name && (item.userRate = value);
+      return item;
     });
     this.items = newItems;
-}
+  }
 
+  doSettlement(name) {
+    let newItems = this.items.map(item => {
+      item.name === name && (item.isConfirmed = true);
+      return item;
+    });
+    this.items = newItems;
+  }
 }
 
 export default decorate(AccountingState, {
@@ -44,6 +53,7 @@ export default decorate(AccountingState, {
   addItem: action,
   deleteItems: action,
   getItems: computed,
-　onChangeFee: action,
- doSettlement: action,
+  onChangeFee: action,
+  onChangeRate: action,
+  doSettlement: action,
 });

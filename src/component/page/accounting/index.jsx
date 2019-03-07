@@ -25,6 +25,10 @@ export default class AccountingPage extends Component {
       this.props.store.accounting.onChangeFee(item.name, number);
   }
 
+  onChangeRate = (item, value) => {
+      this.props.store.accounting.onChangeRate(item.name, value);
+  }
+
   doSettlement = (item) => {
     this.props.store.accounting.doSettlement(item.name);
   }
@@ -49,6 +53,7 @@ export default class AccountingPage extends Component {
         <ListItems
          items={items}
          onChangeFee={this.onChangeFee}
+         onChangeRate={this.onChangeRate}
          doSettlement={this.doSettlement}
          />
       </div>
@@ -58,16 +63,17 @@ export default class AccountingPage extends Component {
 
 const InputItem = ({ onPressEnter }) => {
   return (
-    <Input type="text" className="" allowClear onPressEnter={onPressEnter} />
+    <Input type="text" className="input-mobile" allowClear onPressEnter={onPressEnter} />
   );
 };
 
-const ListItems = ({ items, onChangeFee, doSettlement }) => {
+const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate}) => {
   const item = items.map((item, idx) => (
     <li key={idx}>
       {item.name}
-      <ItemRate>
+      <ItemRate onChange={(value) => onChangeRate(item, value)} disabled={item.isConfirmed}>
         <InputNumber
+         className="input-mobile"
           step={100}
           defaultValue={0}
           formatter={value =>
@@ -132,11 +138,11 @@ const CustomPopConfirm = ({
   );
 };
 
-const ItemRate = ({ children, rate = 0 }) => {
+const ItemRate = ({ children, onChange, disabled }) => {
   return (
     <div>
       {children}
-      <Rate value={rate} />
+      <Rate onChange={onChange} disabled={disabled}/>
     </div>
   );
 };
