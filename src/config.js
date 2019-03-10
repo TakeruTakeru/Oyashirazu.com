@@ -1,10 +1,13 @@
 import firebase from "firebase/app";
 import 'firebase/auth';
 
+const API_SERVER = process.env.REACT_APP_API_SERVER;
+
+
+
 export const config = {
     siteName: "oyashirazu.com"
 }
-
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

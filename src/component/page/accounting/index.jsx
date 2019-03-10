@@ -9,8 +9,16 @@ import {
   InputNumber,
   Rate
 } from "antd";
+import { ServerAdapter } from '../../../api/adapter';
 
 export default class AccountingPage extends Component {
+
+  componentDidMount() {
+    ServerAdapter.post().then(res => {
+      console.log(res)
+    })
+  }
+
   addItem = e => {
     const { value } = e.target;
     this.props.store.accounting.addItem(value);
@@ -35,7 +43,6 @@ export default class AccountingPage extends Component {
 
   render() {
     const { getItems } = this.props.store.accounting;
-
     const items = getItems.map(item => {
       return item;
     });
