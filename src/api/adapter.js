@@ -22,7 +22,7 @@ export class ServerAdapter {
     const fetchURL = server + url;
     const init = initOptions;
     init.method = 'POST';
-    // init.headers = {'Content-Type': 'application/json; charset=utf-8'}
+    init.headers = {"Content-Type": "application/x-www-form-urlencoded"}
     init.body = JSON.stringify(param)
     console.log(init)
     const response = await fetch(fetchURL, init).then(res => {
@@ -38,7 +38,6 @@ export class ServerAdapter {
   static _parseJson(response){
     let result = {}
     try{
-      console.log(response)
       result = response.json();
     } catch (e){
       console.error('[parse error] : failed to parse response to json.');

@@ -24,8 +24,11 @@ class AccountingState {
 
   onChangeFee(name, fee) {
     //   console.log(name, fee)
+    if (isNaN(fee) || fee === '') return;
+    const parsedFee = parseInt(fee, 10);
+    if (parsedFee < 0) return;
     let newItems = this.items.map(item => {
-      item.fee = item.name === name ? fee : item.fee;
+      item.fee = item.name === name ? parsedFee : item.fee;
       return item;
     });
     this.items = newItems;

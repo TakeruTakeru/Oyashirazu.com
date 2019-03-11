@@ -9,14 +9,13 @@ import {
   InputNumber,
   Rate
 } from "antd";
-import { ServerAdapter } from '../../../api/adapter';
+import { ServerAdapter } from "../../../api/adapter";
 
 export default class AccountingPage extends Component {
-
   componentDidMount() {
     ServerAdapter.post().then(res => {
-      console.log(res)
-    })
+      console.log(res);
+    });
   }
 
   addItem = e => {
@@ -30,16 +29,16 @@ export default class AccountingPage extends Component {
   };
 
   onChangeFee = (number, item) => {
-      this.props.store.accounting.onChangeFee(item.name, number);
-  }
+    this.props.store.accounting.onChangeFee(item.name, number);
+  };
 
   onChangeRate = (item, value) => {
-      this.props.store.accounting.onChangeRate(item.name, value);
-  }
+    this.props.store.accounting.onChangeRate(item.name, value);
+  };
 
-  doSettlement = (item) => {
+  doSettlement = item => {
     this.props.store.accounting.doSettlement(item.name);
-  }
+  };
 
   render() {
     const { getItems } = this.props.store.accounting;
@@ -49,47 +48,58 @@ export default class AccountingPage extends Component {
 
     return (
       <div id="home-component">
+      <div className="accounting-item-input">
         <InputItem onPressEnter={this.addItem} />
+        </div>
         <CustomPopConfirm
           title="delete items?"
           onConfirm={this.deleteItemsList}
           onText="delete completed!"
         >
-          <ClearButton />
+          <div className="accounting-clear-button">
+            <ClearButton />
+          </div>
         </CustomPopConfirm>
         <ListItems
-         items={items}
-         onChangeFee={this.onChangeFee}
-         onChangeRate={this.onChangeRate}
-         doSettlement={this.doSettlement}
-         />
+          items={items}
+          onChangeFee={this.onChangeFee}
+          onChangeRate={this.onChangeRate}
+          doSettlement={this.doSettlement}
+        />
       </div>
     );
   }
 }
 
-const InputItem = ({ onPressEnter }) => {
+const InputItem = ({ disabled, onPressEnter, allowClear = true }) => {
   return (
-    <Input type="text" className="input-mobile" allowClear onPressEnter={onPressEnter} />
+    <div className="input-mobile">
+      <Input
+        type="text"
+        allowClear
+        onPressEnter={onPressEnter}
+        disabled={disabled}
+        allowClear={allowClear}
+      />
+    </div>
   );
 };
 
-const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate}) => {
+const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate }) => {
   const item = items.map((item, idx) => (
-    <li key={idx}>
-      {item.name}
-      <ItemRate onChange={(value) => onChangeRate(item, value)} disabled={item.isConfirmed}>
-        <InputNumber
-         className="input-mobile"
-          step={100}
-          defaultValue={0}
-          formatter={value =>
-            `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={value => value.replace(/\$\s?|(,*)/g, "")}
-          onChange={number => onChangeFee(number, item)}
-          disabled={item.isConfirmed}
-        />
+    <li className="list" key={idx}>
+      <h3>{item.name}</h3>
+      <ItemRate
+        onChange={value => onChangeRate(item, value)}
+        disabled={item.isConfirmed}
+      >
+        <div className="input-number">
+          <InputItem
+            disabled={item.isConfirmed}
+            onPressEnter={e => onChangeFee(e.target.value, item)}
+            allowClear={false}
+          />
+        </div>
         <Button type="primary" onClick={() => doSettlement(item)}>
           Confirm
         </Button>
@@ -149,7 +159,7 @@ const ItemRate = ({ children, onChange, disabled }) => {
   return (
     <div>
       {children}
-      <Rate onChange={onChange} disabled={disabled}/>
+      <Rate onChange={onChange} disabled={disabled} />
     </div>
   );
 };
