@@ -2,124 +2,140 @@
 @import "../define";
 
 @media (max-width: 768px) {
-    .container {
-        font-family: $font-family-body;
-        color: $sentence-color;
-        #document {
-            h2 {
-                color: dimgrey;
-                font-weight: 700;
-                letter-spacing: 1px;
-            }
-            .content {
-                margin-bottom: 20px;
-                border-bottom: 2px solid rgba(128, 128, 128, 0.5);
-                .action-button-wrapper {
-                    margin: 5px 20px 5px 0px;
-                    font-size: 0.8rem;
-                    text-align: right;
-                    .action-button {
-                        border: none;
-                        border-radius: 5px;
-                        background: white;
-                        
-                    }
-                }
-            }
-            h3 {
-                color: dimgrey;
-                font-weight: 600;
-                letter-spacing: 1px;
-            }
-
-            p {
-                font-size: $font-body-size;
-
-                &.limited-repository-warning {
-                    &::after {
-                        content: '⚠️この画像はprivateリポジトリなので実際は参加メンバしかできません。';
-                        color: goldenrod;
-                    }
-                }
-            }
-
-            img {
-                width: 100%;
-                height: 250px;
-                object-fit: cover;
-                margin: 5px ;
-            }
-
-            .document-list {
-                padding-left: 10px;
-                li {
-                    list-style: none;
-                    color: darkslateblue;
-                    a {
-                        color: darkblue;
-                        border-bottom: 1px solid blue;
-                        &:focus {
-                            outline: none;
-                        }
-                    }
-                    .note {
-                        &::before {
-                            content: ":";
-                            display: inline;
-                        }
-                        margin-left: 5px;
-                        font-size: 1rem;
-                    }
-                }
-            }
+  .container {
+    font-family: $font-family-body;
+    color: $sentence-color;
+    #document {
+      h2 {
+        color: dimgrey;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .content {
+        margin-bottom: 20px;
+        border-bottom: 2px solid rgba(128, 128, 128, 0.5);
+        .action-button-wrapper {
+          margin: 5px 20px 5px 0px;
+          font-size: 0.8rem;
+          text-align: right;
+          .action-button {
+            border: none;
+            border-radius: 5px;
+            background: white;
+          }
         }
+      }
+      h3 {
+        color: dimgrey;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      p {
+        font-size: $font-body-size;
+
+        &.limited-repository-warning {
+          &::after {
+            content: "⚠️この画像はprivateリポジトリなので実際は参加メンバしかできません。";
+            color: goldenrod;
+          }
+        }
+      }
+
+      img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        margin: 5px;
+      }
+
+      .document-list {
+        padding-left: 10px;
+        li {
+          list-style: none;
+          color: darkslateblue;
+          a {
+            color: darkblue;
+            border-bottom: 1px solid blue;
+            &:focus {
+              outline: none;
+            }
+          }
+          .note {
+            &::before {
+              content: ":";
+              display: inline;
+            }
+            margin-left: 5px;
+            font-size: 1rem;
+          }
+        }
+      }
     }
+  }
 }
 
 .business-card {
-    text-align: center;
-    margin: 10px 10px 10px 10px;
-    border: 2px solid black;
-    .name {
-        margin: 0px 5px 0px 0px;
-    }
-    .twitter {
-        margin: 0px 5px 0px 0px;
-    }
-    .birth {
-        margin: 0px 5px 0px 0px;
-    }
+  text-align: center;
+  margin: 10px 10px 10px 10px;
+  border: 2px solid black;
+  .name {
+    margin: 0px 5px 0px 0px;
+  }
+  .twitter {
+    margin: 0px 5px 0px 0px;
+  }
+  .birth {
+    margin: 0px 5px 0px 0px;
+  }
 }
 
 .text-align-center {
-    text-align: center;
+  text-align: center;
 }
 
 .input-mobile {
-    font-size: 16px;
-    transform: scale(0.9);
+  & input {
+    font-size: 16px !important;
+    transform: scale(0.9) !important;
+  }
 }
 
 .list {
-    list-style: none;
-    margin: 10px;
+  list-style: none;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid;
 }
 
 ul {
-    padding: 0;
+  padding: 0;
 }
 
 .input-number {
-    display: inline-block;
-    width: 30%;
-    margin: 0;
+  display: inline-block;
+  width: 30%;
+  margin: 0;
 }
 
 .accounting-clear-button {
-    display: inline-block;
+  display: inline-block;
 }
 
 .accounting-item-input {
-    display: inline-block;
-    width: 50%;
+  display: inline-block;
+  width: 50%;
+}
+
+.delete-icon {
+  background: red !important;
+}
+
+.item-delete-button {
+  display: inline-block;
+  text-align: right !important;
+}
+
+.item-name {
+  display: inline;
 }

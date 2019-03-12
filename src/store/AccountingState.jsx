@@ -49,6 +49,13 @@ class AccountingState {
     });
     this.items = newItems;
   }
+
+  deleteItem(name) {
+    let newItems = this.items.filter(item => {
+      return item.name !== name
+    });
+    this.items = newItems;
+  }
 }
 
 export default decorate(AccountingState, {
@@ -59,4 +66,5 @@ export default decorate(AccountingState, {
   onChangeFee: action,
   onChangeRate: action,
   doSettlement: action,
+  deleteItem: action,
 });

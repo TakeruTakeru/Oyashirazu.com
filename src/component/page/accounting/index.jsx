@@ -40,6 +40,10 @@ export default class AccountingPage extends Component {
     this.props.store.accounting.doSettlement(item.name);
   };
 
+  deleteItem = item => {
+    this.props.store.accounting.deleteItem(item.name);
+  };
+
   render() {
     const { getItems } = this.props.store.accounting;
     const items = getItems.map(item => {
@@ -48,8 +52,8 @@ export default class AccountingPage extends Component {
 
     return (
       <div id="home-component">
-      <div className="accounting-item-input">
-        <InputItem onPressEnter={this.addItem} />
+        <div className="accounting-item-input">
+          <InputItem onPressEnter={this.addItem} />
         </div>
         <CustomPopConfirm
           title="delete items?"
@@ -65,6 +69,7 @@ export default class AccountingPage extends Component {
           onChangeFee={this.onChangeFee}
           onChangeRate={this.onChangeRate}
           doSettlement={this.doSettlement}
+          deleteItem={this.deleteItem}
         />
       </div>
     );
@@ -85,10 +90,10 @@ const InputItem = ({ disabled, onPressEnter, allowClear = true }) => {
   );
 };
 
-const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate }) => {
+const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate, deleteItem }) => {
   const item = items.map((item, idx) => (
     <li className="list" key={idx}>
-      <h3>{item.name}</h3>
+      <h3 className="item-name">{item.name}</h3>
       <ItemRate
         onChange={value => onChangeRate(item, value)}
         disabled={item.isConfirmed}
@@ -100,9 +105,13 @@ const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate }) => {
             allowClear={false}
           />
         </div>
+
         <Button type="primary" onClick={() => doSettlement(item)}>
           Confirm
         </Button>
+        <div className="item-delete-button">
+          <ClearButton disabled={item.isConfirmed} onClick={() => deleteItem(item)} />
+        </div>
       </ItemRate>
       {item.fee}
     </li>
@@ -110,10 +119,17 @@ const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate }) => {
   return <ul>{item}</ul>;
 };
 
-const ClearButton = ({ onClick }) => {
+const ClearButton = ({
+  onClick,
+  text,
+  className = "delete-icon",
+  spin = false,
+  disabled=false
+}) => {
   return (
-    <Button onClick={onClick}>
-      <Icon type="delete" /> clear
+    <Button disabled={disabled} className={className} onClick={onClick}>
+      <Icon style={{ color: "white" }} type="delete" theme="outlined" />
+      {text}
     </Button>
   );
 };
@@ -144,7 +160,7 @@ const CustomPopConfirm = ({
   return (
     <Popconfirm
       title={title}
-      placement="rightBottom"
+      placement="bottom"
       onConfirm={onConfirm}
       onCancel={onCancel}
       okText="Yes"
