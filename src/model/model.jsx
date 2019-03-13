@@ -36,4 +36,8 @@ export class AccountingItemModel {
         this.isConfirmed = false;
         this.userRate = 0;
     }
+
+    getFee = () => {
+        return this.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
 }

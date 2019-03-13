@@ -6,8 +6,8 @@ import {
   Modal,
   Popconfirm,
   message,
-  InputNumber,
-  Rate
+  Rate,
+  Empty
 } from "antd";
 import { ServerAdapter } from "../../../api/adapter";
 
@@ -76,13 +76,14 @@ export default class AccountingPage extends Component {
   }
 }
 
-const InputItem = ({ disabled, onPressEnter, allowClear = true }) => {
+const InputItem = ({ disabled, onChange, onPressEnter, allowClear = true }) => {
   return (
     <div className="input-mobile">
       <Input
         type="text"
         allowClear
         onPressEnter={onPressEnter}
+        onChange={onChange}
         disabled={disabled}
         allowClear={allowClear}
       />
@@ -90,7 +91,14 @@ const InputItem = ({ disabled, onPressEnter, allowClear = true }) => {
   );
 };
 
-const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate, deleteItem }) => {
+const ListItems = ({
+  items,
+  onChangeFee,
+  doSettlement,
+  onChangeRate,
+  deleteItem
+}) => {
+  if (items.length < 1) return <EmptyDisplay />;
   const item = items.map((item, idx) => (
     <li className="list" key={idx}>
       <h3 className="item-name">{item.name}</h3>
@@ -101,19 +109,26 @@ const ListItems = ({ items, onChangeFee, doSettlement, onChangeRate, deleteItem 
         <div className="input-number">
           <InputItem
             disabled={item.isConfirmed}
-            onPressEnter={e => onChangeFee(e.target.value, item)}
+            onChange={e => onChangeFee(e.target.value, item)}
             allowClear={false}
           />
         </div>
 
-        <Button type="primary" onClick={() => doSettlement(item)}>
+        <Button
+          disabled={item.isConfirmed}
+          type="primary"
+          onClick={() => doSettlement(item)}
+        >
           Confirm
         </Button>
         <div className="item-delete-button">
-          <ClearButton disabled={item.isConfirmed} onClick={() => deleteItem(item)} />
+          <ClearButton
+            disabled={item.isConfirmed}
+            onClick={() => deleteItem(item)}
+          />
         </div>
       </ItemRate>
-      {item.fee}
+      {item.getFee()}円
     </li>
   ));
   return <ul>{item}</ul>;
@@ -124,7 +139,7 @@ const ClearButton = ({
   text,
   className = "delete-icon",
   spin = false,
-  disabled=false
+  disabled = false
 }) => {
   return (
     <Button disabled={disabled} className={className} onClick={onClick}>
@@ -176,6 +191,16 @@ const ItemRate = ({ children, onChange, disabled }) => {
     <div>
       {children}
       <Rate onChange={onChange} disabled={disabled} />
+    </div>
+  );
+};
+
+const PriceDisplay = props => {};
+
+const EmptyDisplay = () => {
+  return (
+    <div className="imao-wrapper">
+      <Empty image="../../../static/imao.jpg" />
     </div>
   );
 };

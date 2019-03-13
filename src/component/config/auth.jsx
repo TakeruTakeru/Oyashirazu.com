@@ -16,7 +16,7 @@ class PrivateRoute extends Component {
     return (
       <Route {...rest} render={() => {
         // 未ログインなら、ログイン画面にリダイレクト.
-        if (user.isLogin) {
+        if (!user.isLogin) {
           return <Redirect to={{ pathname: '/login', state: { from: this.props.location } }} />
         }
         // ログイン済なら、指定されたコンポーネントを表示.
