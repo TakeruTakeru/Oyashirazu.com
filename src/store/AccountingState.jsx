@@ -19,7 +19,7 @@ class AccountingState {
   }
 
   get getItems() {
-    return this.items;
+    return this.items.slice().reverse();
   }
 
   onChangeFee(name, fee) {

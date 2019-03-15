@@ -7,7 +7,8 @@ import {
   Popconfirm,
   message,
   Rate,
-  Empty
+  Empty,
+  Statistic
 } from "antd";
 import { ServerAdapter } from "../../../api/adapter";
 
@@ -64,6 +65,7 @@ export default class AccountingPage extends Component {
             <ClearButton />
           </div>
         </CustomPopConfirm>
+        <TotalPriceDisplay items={items}></TotalPriceDisplay>
         <ListItems
           items={items}
           onChangeFee={this.onChangeFee}
@@ -102,6 +104,7 @@ const ListItems = ({
   const item = items.map((item, idx) => (
     <li className="list" key={idx}>
       <h3 className="item-name">{item.name}</h3>
+     <PriceDisplay price={item.fee} />
       <ItemRate
         onChange={value => onChangeRate(item, value)}
         disabled={item.isConfirmed}
@@ -113,7 +116,6 @@ const ListItems = ({
             allowClear={false}
           />
         </div>
-
         <Button
           disabled={item.isConfirmed}
           type="primary"
@@ -128,7 +130,7 @@ const ListItems = ({
           />
         </div>
       </ItemRate>
-      {item.getFee()}円
+     
     </li>
   ));
   return <ul>{item}</ul>;
@@ -195,7 +197,27 @@ const ItemRate = ({ children, onChange, disabled }) => {
   );
 };
 
-const PriceDisplay = props => {};
+const PriceDisplay = ({ price }) => {
+  const style = price > 1000 ? { color: '#FD151B'} : {color: "#136F63"}
+  return (
+    <div>
+      <Statistic value={price} suffix={'円'} valueStyle={style}></Statistic>
+    </div>
+  )
+};
+
+const TotalPriceDisplay = ({ items }) => {
+  const totalFeesList = items.map(item => {
+    return item.fee;
+  })
+  const reducer = (accumulater, value) => accumulater + value;
+  const totalFee = totalFeesList.length > 0 ? totalFeesList.reduce(reducer) : '0'
+  return (
+    <div>
+      <PriceDisplay price={totalFee} />
+    </div>
+  )
+}
 
 const EmptyDisplay = () => {
   return (
