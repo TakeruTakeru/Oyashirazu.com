@@ -8,7 +8,7 @@ import {
   message,
   Rate,
   Empty,
-  Statistic
+  Statistic,
 } from "antd";
 import { ServerAdapter } from "../../../api/adapter";
 
@@ -47,7 +47,7 @@ export default class AccountingPage extends Component {
 
   render() {
     const { modalVisible, changeModalState } = this.props.store.uiState;
-    const { getItems } = this.props.store.accounting;
+    const { getItems, getTotalPrice } = this.props.store.accounting;
     const items = getItems.map(item => {
       return item;
     });
@@ -66,7 +66,7 @@ export default class AccountingPage extends Component {
             <ClearButton />
           </div>
         </CustomPopConfirm>
-        <TotalPriceDisplay items={items}></TotalPriceDisplay>
+        <TotalPriceDisplay items={items} totalPrice={getTotalPrice}></TotalPriceDisplay>
         <ListItems
           items={items}
           onChangeFee={this.onChangeFee}
@@ -74,7 +74,7 @@ export default class AccountingPage extends Component {
           doSettlement={this.doSettlement}
           deleteItem={this.deleteItem}
         />
-        <ModalExample items={items} visible={modalVisible} onCancel={changeModalState}/>
+        <PreviewModal items={items} visible={modalVisible} onCancel={changeModalState} totalPrice={getTotalPrice}/>
         <Button icon={'copy'} onClick={changeModalState}></Button>
       </div>
     );
@@ -105,7 +105,7 @@ const ListItems = ({
 }) => {
   if (items.length < 1) return <EmptyDisplay />;
   const item = items.map((item, idx) => (
-    <li className="list" key={idx}>
+    <li className="list list-borderd" key={idx}>
       <h3 className="item-name">{item.name}</h3>
      <PriceDisplay price={item.fee} />
       <ItemRate
@@ -154,10 +154,13 @@ const ClearButton = ({
   );
 };
 
-const ModalExample = ({ title, visible, onOk, onCancel, items }) => {
+const PreviewModal = ({ title, visible, onOk, onCancel, items, totalPrice }) => {
+  //ant designのmessage componentで初回の呼び出しが効かないためフラグを立てる。
+  let messageDebugger = true;
   //記録されたitemをテキストベースにフォーマットし、クリップボードへコピーする。
   //line共有用。
   function copy() {
+    messageDebugger ? message.success() : messageDebugger = false;
     const items = document.getElementsByClassName("copy-items")
     let text = document.createElement('textarea');
     text.value = items[0].innerText;
@@ -165,25 +168,27 @@ const ModalExample = ({ title, visible, onOk, onCancel, items }) => {
     text.select()
     document.execCommand('copy')
     text.parentElement.removeChild(text)
-    console.log(items)
+    message.success('コピーしました！Lineに貼ってね！')
+    onCancel();
   }
   const ItemList = items.map((item, idx) => {
     return(
     <li className="list" key={idx}>
-      名前{item.name} 金額{item.fee}
+      {item.name}が{item.fee}円
     </li>)
   })
   return (
     <Modal
       title={title}
       visible={visible}
-      onOk={onOk}
+      onOk={copy}
       onCancel={onCancel}
     >
+    <h3>お会計プレビュー</h3>
     <ul className="copy-items">
       {ItemList}
+      合計金額は{totalPrice}円です。
     </ul>
-    <Button onClick={copy}></Button>
     </Modal>
   );
 };
@@ -228,15 +233,10 @@ const PriceDisplay = ({ price }) => {
   )
 };
 
-const TotalPriceDisplay = ({ items }) => {
-  const totalFeesList = items.map(item => {
-    return item.fee;
-  })
-  const reducer = (accumulater, value) => accumulater + value;
-  const totalFee = totalFeesList.length > 0 ? totalFeesList.reduce(reducer) : '0'
+const TotalPriceDisplay = ({ items, totalPrice }) => {
   return (
     <div>
-      <PriceDisplay price={totalFee} />
+      <PriceDisplay price={totalPrice} />
     </div>
   )
 }

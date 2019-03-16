@@ -5,7 +5,6 @@ class UiState {
     modalVisible = false;
 
     changeModalState = () =>{
-        console.log(this)
         this.modalVisible = !this.modalVisible
     }
 }

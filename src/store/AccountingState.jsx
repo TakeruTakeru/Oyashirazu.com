@@ -56,6 +56,15 @@ class AccountingState {
     });
     this.items = newItems;
   }
+
+  get getTotalPrice() {
+    const totalFeesList = this.items.map(item => {
+      return item.fee;
+    })
+    const reducer = (accumulater, value) => accumulater + value;
+    const totalFee = totalFeesList.length > 0 ? totalFeesList.reduce(reducer) : 0;
+    return totalFee
+  }
 }
 
 export default decorate(AccountingState, {
@@ -67,4 +76,5 @@ export default decorate(AccountingState, {
   onChangeRate: action,
   doSettlement: action,
   deleteItem: action,
+  getTotalPrice: computed,
 });
