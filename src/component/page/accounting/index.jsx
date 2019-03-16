@@ -46,6 +46,7 @@ export default class AccountingPage extends Component {
   };
 
   render() {
+    const { modalVisible, changeModalState } = this.props.store.uiState;
     const { getItems } = this.props.store.accounting;
     const items = getItems.map(item => {
       return item;
@@ -73,6 +74,8 @@ export default class AccountingPage extends Component {
           doSettlement={this.doSettlement}
           deleteItem={this.deleteItem}
         />
+        <ModalExample items={items} visible={modalVisible} onCancel={changeModalState}/>
+        <Button icon={'copy'} onClick={changeModalState}></Button>
       </div>
     );
   }
@@ -151,17 +154,36 @@ const ClearButton = ({
   );
 };
 
-const ModalExample = ({ title, visible, onOk, onCancel }) => {
+const ModalExample = ({ title, visible, onOk, onCancel, items }) => {
+  //記録されたitemをテキストベースにフォーマットし、クリップボードへコピーする。
+  //line共有用。
+  function copy() {
+    const items = document.getElementsByClassName("copy-items")
+    let text = document.createElement('textarea');
+    text.value = items[0].innerText;
+    document.body.appendChild(text);
+    text.select()
+    document.execCommand('copy')
+    text.parentElement.removeChild(text)
+    console.log(items)
+  }
+  const ItemList = items.map((item, idx) => {
+    return(
+    <li className="list" key={idx}>
+      名前{item.name} 金額{item.fee}
+    </li>)
+  })
   return (
     <Modal
-      title="Basic Modal"
+      title={title}
       visible={visible}
       onOk={onOk}
       onCancel={onCancel}
     >
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+    <ul className="copy-items">
+      {ItemList}
+    </ul>
+    <Button onClick={copy}></Button>
     </Modal>
   );
 };
