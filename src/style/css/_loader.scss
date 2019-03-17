@@ -1,0 +1,49 @@
+.load-wrapper {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: sans-serif;
+}
+
+.loader {
+    position: relative;
+    font-size: 5em;
+    background: #fff;
+    color: #000;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 5px;
+    padding: 10px;
+}
+.loader span {
+    color: #fff;
+    mix-blend-mode: difference;
+
+}
+.loader::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 100%;
+    background: #000;
+    animation: animate 2s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        left: 0;
+    }
+
+    50% {
+        left: calc(100% - 120px);
+    }
+
+    100% {
+        left: 0;
+    }
+}

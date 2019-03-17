@@ -57,13 +57,21 @@ class AccountingState {
     this.items = newItems;
   }
 
+  countUpItem(name, value) {
+    let newItems = this.items.map(item => {
+      item.name === name && (item.count = value);
+      return item;
+    });
+    this.items = newItems;
+  }
+
   get getTotalPrice() {
     const totalFeesList = this.items.map(item => {
-      return item.fee;
+      return item.getTotalFee();
     })
     const reducer = (accumulater, value) => accumulater + value;
     const totalFee = totalFeesList.length > 0 ? totalFeesList.reduce(reducer) : 0;
-    return totalFee
+    return totalFee;
   }
 }
 

@@ -9,8 +9,10 @@ import {
   Rate,
   Empty,
   Statistic,
+  InputNumber,
 } from "antd";
 import { ServerAdapter } from "../../../api/adapter";
+import Loading from "../../Loading";
 
 export default class AccountingPage extends Component {
   componentDidMount() {
@@ -45,12 +47,19 @@ export default class AccountingPage extends Component {
     this.props.store.accounting.deleteItem(item.name);
   };
 
+  countUpItem = (item, value) => {
+    console.log('called ')
+    value = value === '' ? 1 : value;
+    this.props.store.accounting.countUpItem(item.name, value);
+  }
+
   render() {
-    const { modalVisible, changeModalState } = this.props.store.uiState;
+    const { modalVisible, changeModalState, onLoading } = this.props.store.uiState;
     const { getItems, getTotalPrice } = this.props.store.accounting;
     const items = getItems.map(item => {
       return item;
     });
+    if(onLoading) return <Loading />
 
     return (
       <div id="home-component">
@@ -73,6 +82,7 @@ export default class AccountingPage extends Component {
           onChangeRate={this.onChangeRate}
           doSettlement={this.doSettlement}
           deleteItem={this.deleteItem}
+          countUpItem={this.countUpItem}
         />
         <PreviewModal items={items} visible={modalVisible} onCancel={changeModalState} totalPrice={getTotalPrice}/>
         <Button icon={'copy'} onClick={changeModalState}></Button>
@@ -101,7 +111,8 @@ const ListItems = ({
   onChangeFee,
   doSettlement,
   onChangeRate,
-  deleteItem
+  deleteItem,
+  countUpItem,
 }) => {
   if (items.length < 1) return <EmptyDisplay />;
   const item = items.map((item, idx) => (
@@ -119,6 +130,7 @@ const ListItems = ({
             allowClear={false}
           />
         </div>
+        <CountUpItem value={item.count} onChange={value => countUpItem(item, value)} disabled={item.isConfirmed}></CountUpItem>
         <Button
           disabled={item.isConfirmed}
           type="primary"
@@ -143,7 +155,6 @@ const ClearButton = ({
   onClick,
   text,
   className = "delete-icon",
-  spin = false,
   disabled = false
 }) => {
   return (
@@ -162,19 +173,36 @@ const PreviewModal = ({ title, visible, onOk, onCancel, items, totalPrice }) => 
   function copy() {
     messageDebugger ? message.success() : messageDebugger = false;
     const items = document.getElementsByClassName("copy-items")
-    let text = document.createElement('textarea');
-    text.value = items[0].innerText;
-    document.body.appendChild(text);
-    text.select()
+    let element = document.createElement('textarea');
+    element.value = items[0].innerText;
+    document.body.appendChild(element);
+    element = iosHandle(element);
     document.execCommand('copy')
-    text.parentElement.removeChild(text)
+    element.parentElement.removeChild(element)
     message.success('コピーしました！Lineに貼ってね！')
     onCancel();
   }
+
+  function iosHandle(elem) {
+    let editable = elem.contentEditable
+    let readOnly = elem.readOnly;
+    elem.contentEditable = true;
+    elem.readOnly = true;
+    let range = document.createRange();
+    range.selectNode(elem);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    elem.setSelectionRange(0, 99999);
+    elem.contentEditable = editable;
+    elem.readOnly = readOnly;
+    return elem;
+  }
+  
   const ItemList = items.map((item, idx) => {
     return(
     <li className="list" key={idx}>
-      {item.name}が{item.fee}円
+      {item.name}が{item.count}点で{item.getTotalFee()}円
     </li>)
   })
   return (
@@ -248,3 +276,7 @@ const EmptyDisplay = () => {
     </div>
   );
 };
+
+const CountUpItem = ({ value, onChange, disabled}) => {
+  return <InputNumber className="input-mobile" min={1} value={value} onChange={onChange} disabled={disabled} />
+}

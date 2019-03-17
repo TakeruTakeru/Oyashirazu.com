@@ -16,7 +16,6 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import "./App.scss";
 import "antd/dist/antd.css";
 
-
 class App extends Component {
 
   onClickMenu = () => {

@@ -35,9 +35,11 @@ export class AccountingItemModel {
         this.fee = 0;
         this.isConfirmed = false;
         this.userRate = 0;
+        this.count = 1;
     }
 
-    getFee = () => {
-        return this.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    getTotalFee = () => {
+        return this.fee * this.count;
+        // return itemFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 }
