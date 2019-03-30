@@ -11,14 +11,29 @@ import {
   Statistic,
   InputNumber,
 } from "antd";
-import { ServerAdapter } from "../../../api/adapter";
 import Loading from "../../Loading";
+import {getPayment, postReceipt} from '../../../api/api';
 
 export default class AccountingPage extends Component {
+
   componentDidMount() {
-    ServerAdapter.post().then(res => {
-      console.log(res);
-    });
+    //30分でポーリング
+    this.setPayment();
+    this.pollingPayment = setInterval(()=> this.setPayment(), 1000*60*30);
+    // const param = {'id': 1, itemList: ['もんじゃ', '焼き芋'], priceList: [1000, 100]};
+    // postReceipt(param).then(res => {
+    // })
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollingPayment)
+    this.pollingPayment = null;
+  }
+  setPayment = () => {
+    getPayment().then(res => {
+      console.log(res)
+      this.props.store.accounting.setPayment(res);
+    })
   }
 
   addItem = e => {
@@ -48,14 +63,13 @@ export default class AccountingPage extends Component {
   };
 
   countUpItem = (item, value) => {
-    console.log('called ')
     value = value === '' ? 1 : value;
     this.props.store.accounting.countUpItem(item.name, value);
   }
 
   render() {
     const { modalVisible, changeModalState, onLoading } = this.props.store.uiState;
-    const { getItems, getTotalPrice } = this.props.store.accounting;
+    const { getItems, getTotalPrice, payment } = this.props.store.accounting;
     const items = getItems.map(item => {
       return item;
     });
@@ -63,6 +77,10 @@ export default class AccountingPage extends Component {
 
     return (
       <div id="home-component">
+      <div className="accounting-payment">
+        <h4>今回のお支払い</h4>
+        <PriceDisplay className="accounting-payment-price-wrapper" price={payment} />
+      </div>
         <div className="accounting-item-input">
           <InputItem onPressEnter={this.addItem} />
         </div>
@@ -252,10 +270,10 @@ const ItemRate = ({ children, onChange, disabled }) => {
   );
 };
 
-const PriceDisplay = ({ price }) => {
+const PriceDisplay = ({ price, className="" }) => {
   const style = price > 1000 ? { color: '#FD151B'} : {color: "#136F63"}
   return (
-    <div>
+    <div className={className}>
       <Statistic value={price} suffix={'円'} valueStyle={style}></Statistic>
     </div>
   )

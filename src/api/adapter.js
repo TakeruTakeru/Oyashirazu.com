@@ -1,12 +1,12 @@
-const server = process.env.REACT_APP_API_SERVER
+let server = process.env.REACT_APP_LOCAL_AIP_SERVER
 let initOptions = {
   method: 'GET',
   mode: 'cors',
 }
 
-// if (process.env.NODE_ENV === 'development') {
-
-// }
+if (process.env.NODE_ENV !== 'development') {
+  server = process.env.REACT_APP_API_SERVER;
+}
 
 export class ServerAdapter {
 
@@ -18,7 +18,7 @@ export class ServerAdapter {
     return this._parseJson(response);
   }
 
-  static async post(url='', param={'data': 1}){
+  static async post(url='', param){
     const fetchURL = server + url;
     const init = initOptions;
     init.method = 'POST';

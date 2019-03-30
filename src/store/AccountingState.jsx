@@ -3,6 +3,7 @@ import { AccountingItemModel } from "../model/model";
 
 class AccountingState {
   items = [];
+  payment = 0;
 
   addItem(name) {
     //prevent from same name item and false value.
@@ -73,10 +74,15 @@ class AccountingState {
     const totalFee = totalFeesList.length > 0 ? totalFeesList.reduce(reducer) : 0;
     return totalFee;
   }
+
+  setPayment(payment) {
+    this.payment = payment
+  }
 }
 
 export default decorate(AccountingState, {
   items: observable,
+  payment: observable,
   addItem: action,
   deleteItems: action,
   getItems: computed,
@@ -85,4 +91,5 @@ export default decorate(AccountingState, {
   doSettlement: action,
   deleteItem: action,
   getTotalPrice: computed,
+  setPayment: action,
 });

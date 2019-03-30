@@ -155,3 +155,15 @@ ul {
 
   }
 }
+
+.accounting-payment {
+  display: block;
+  background: rgba(71, 240, 108, 0.2);
+  border-radius: 5px;
+  margin: 10px;
+  .accounting-payment-price-wrapper {
+    display: block;
+    text-align: right;
+    margin: 5px;
+  }
+}
