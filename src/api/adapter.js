@@ -1,3 +1,5 @@
+import _ from 'underscore';
+
 let server = process.env.REACT_APP_LOCAL_AIP_SERVER
 let initOptions = {
   method: 'GET',
@@ -11,6 +13,7 @@ if (process.env.NODE_ENV !== 'development') {
 export class ServerAdapter {
 
   static async get(url=''){
+    console.log('get')
     const fetchURL = server + url;
     const response = await fetch(fetchURL, initOptions).then(res => {
       return res;
@@ -19,12 +22,12 @@ export class ServerAdapter {
   }
 
   static async post(url='', param){
+    console.log('post')
     const fetchURL = server + url;
-    const init = initOptions;
+    const init = _.clone(initOptions);
     init.method = 'POST';
     init.headers = {"Content-Type": "application/x-www-form-urlencoded"}
     init.body = JSON.stringify(param)
-    console.log(init)
     const response = await fetch(fetchURL, init).then(res => {
       return res;
     });

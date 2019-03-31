@@ -8,7 +8,7 @@ import "ag-grid-community/dist/styles/ag-theme-balham.css";
 const ImageComponent = ({image, onClick}) => {
     return (
     <div className="none">
-        <img className="image" src={image} onClick={onClick} />
+        <img alt="イマヲ" className="image" src={image} onClick={onClick} />
     </div>
     )
 }

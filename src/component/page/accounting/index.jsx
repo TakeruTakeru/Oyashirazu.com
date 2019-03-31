@@ -10,19 +10,23 @@ import {
   Empty,
   Statistic,
   InputNumber,
+  Select,
 } from "antd";
 import Loading from "../../Loading";
 import {getPayment, postReceipt} from '../../../api/api';
 
+const Option = Select.Option;
+
 export default class AccountingPage extends Component {
 
+  startPolling() {
+    //30分でポーリングしたかったけどなぜかpostリクエストを引き継いで実行してしまう。
+    this.pollingPayment = setInterval(() => this.setPayment(), 1000*60*30);
+  }
+
   componentDidMount() {
-    //30分でポーリング
     this.setPayment();
-    this.pollingPayment = setInterval(()=> this.setPayment(), 1000*60*30);
-    // const param = {'id': 1, itemList: ['もんじゃ', '焼き芋'], priceList: [1000, 100]};
-    // postReceipt(param).then(res => {
-    // })
+    this.startPolling();
   }
 
   componentWillUnmount() {
@@ -30,8 +34,8 @@ export default class AccountingPage extends Component {
     this.pollingPayment = null;
   }
   setPayment = () => {
+    console.log('called setpayment')
     getPayment().then(res => {
-      console.log(res)
       this.props.store.accounting.setPayment(res);
     })
   }
@@ -67,9 +71,19 @@ export default class AccountingPage extends Component {
     this.props.store.accounting.countUpItem(item.name, value);
   }
 
+  onOk = param => {
+    postReceipt(param).then(res => {
+      console.log(res);
+    })
+  }
+
+  selectUserId = value => {
+    this.props.store.accounting.setUserId(value);
+  }
+
   render() {
     const { modalVisible, changeModalState, onLoading } = this.props.store.uiState;
-    const { getItems, getTotalPrice, payment } = this.props.store.accounting;
+    const { getItems, getTotalPrice, payment, userId } = this.props.store.accounting;
     const items = getItems.map(item => {
       return item;
     });
@@ -102,7 +116,7 @@ export default class AccountingPage extends Component {
           deleteItem={this.deleteItem}
           countUpItem={this.countUpItem}
         />
-        <PreviewModal items={items} visible={modalVisible} onCancel={changeModalState} totalPrice={getTotalPrice}/>
+        <PreviewModal items={items} onOk={this.onOk} visible={modalVisible} onCancel={changeModalState} totalPrice={getTotalPrice} selectUserId={this.selectUserId} userId={userId}/>
         <Button icon={'copy'} onClick={changeModalState}></Button>
       </div>
     );
@@ -114,7 +128,6 @@ const InputItem = ({ disabled, onChange, onPressEnter, allowClear = true }) => {
     <div className="input-mobile">
       <Input
         type="text"
-        allowClear
         onPressEnter={onPressEnter}
         onChange={onChange}
         disabled={disabled}
@@ -183,7 +196,7 @@ const ClearButton = ({
   );
 };
 
-const PreviewModal = ({ title, visible, onOk, onCancel, items, totalPrice }) => {
+const PreviewModal = ({ title, visible, onOk, onCancel, items, totalPrice, selectUserId, userId }) => {
   //ant designのmessage componentで初回の呼び出しが効かないためフラグを立てる。
   let messageDebugger = true;
   //記録されたitemをテキストベースにフォーマットし、クリップボードへコピーする。
@@ -223,14 +236,47 @@ const PreviewModal = ({ title, visible, onOk, onCancel, items, totalPrice }) => 
       {item.name}が{item.count}点で{item.getTotalFee()}円
     </li>)
   })
+
+  const itemList = items.map(item => {
+    return item.name;
+  });
+
+  const priceList = items.map((item) => {
+    return item.getTotalFee();
+  });
+
+  const param = {id: userId, itemList: itemList, priceList: priceList};
+  const users = [
+    {userId: '1', userName: '漆原 健'},
+    {userId: '2', userName: '佐藤 雄飛'},
+    {userId: '3', userName: '外薗 イマヲ'},
+    {userId: '4', userName: 'やなぎさわ あおい'},
+    {userId: '5', userName: '天翔'},
+    {userId: '6', userName: '萱原 翼'},
+    {userId: '7', userName: '相原 和樹'},
+    {userId: '8', userName: 'もり とう'},
+    {userId: '9', userName: '林 英樹'},
+    {userId: '10', userName: 'あらはた まほ'},
+    {userId: '11', userName: 'ぐっさん'},
+    {userId: '12', userName: 'Yudai Tamakubo'},
+  ];
+
   return (
     <Modal
       title={title}
       visible={visible}
-      onOk={copy}
+      onOk={() => onOk(param)}
       onCancel={onCancel}
     >
     <h3>お会計プレビュー</h3>
+    <div>
+      あなたはだあれ？
+      <Select style={{'width': '200px', 'margin': '10px'}} placeholder="あなたのIdを選んで下さい" onChange={selectUserId}>
+        {users.map((user, idx) => {
+          return <Option key={idx} value={user.userId}>{user.userName}</Option>
+        })}
+      </Select>
+    </div>
     <ul className="copy-items">
       {ItemList}
       合計金額は{totalPrice}円です。

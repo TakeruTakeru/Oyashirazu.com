@@ -4,12 +4,13 @@ import { AccountingItemModel } from "../model/model";
 class AccountingState {
   items = [];
   payment = 0;
+  userId = 1;
 
   addItem(name) {
     //prevent from same name item and false value.
     !name ||
       this.items.some(item => {
-        return item.name == name;
+        return item.name === name;
       }) ||
       this.items.push(new AccountingItemModel(name));
     return this.items;
@@ -24,7 +25,6 @@ class AccountingState {
   }
 
   onChangeFee(name, fee) {
-    //   console.log(name, fee)
     if (isNaN(fee) || fee === '') return;
     const parsedFee = parseInt(fee, 10);
     if (parsedFee < 0) return;
@@ -76,13 +76,18 @@ class AccountingState {
   }
 
   setPayment(payment) {
-    this.payment = payment
+    this.payment = payment;
+  }
+
+  setUserId(userId) {
+    this.userId = parseInt(userId);
   }
 }
 
 export default decorate(AccountingState, {
   items: observable,
   payment: observable,
+  userId: observable,
   addItem: action,
   deleteItems: action,
   getItems: computed,
